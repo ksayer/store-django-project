@@ -6,6 +6,7 @@ from .basket import Basket
 
 
 def basket_summary(request):
+    # basket = Basket(request)  # Можно убрать, т.к. есть такой же контекст процессор
     return render(request, 'store/basket/summary.html')
 
 
