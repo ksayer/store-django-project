@@ -14,7 +14,7 @@
       </div>
       <div class="col-md-9 col-lg-10 ps-md-3 ps-lg-10">
         <a href="{{ product.get_absolute_url }}" class="text-decoration-none text-reset">
-          <h1 class="h5 pt-2">{{ product.title }}</h1>
+          <h1 class="h5 pt-2">{{ product.name|title }}</h1>
         </a>
         <div class="border">
           <div class="col border-bottom">
@@ -57,4 +57,26 @@
     </div>
   </div>
 </main>
+
+<script>
+    $(document).on('click', '.delete-button', function (e) {
+        e.preventDefault();
+        var prodid = $(this).data('index');
+        $.ajax({
+            type: 'POST',
+            url: '{% url 'basket:basket_delete' %}',
+            data: {
+                productid: $(this).data('index'),
+                productqty: $('#select option:selected').text(),
+                csrfmiddlewaretoken: '{{csrf_token}}',
+                action: 'post'
+            },
+            success: function (json) {
+                $('.product-item[data-index=' + prodid + ']').remove();
+            },
+            error: function (xhr, errmsg, err){}
+        });
+    })
+</script>
+
 {% endblock %}

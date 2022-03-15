@@ -24,6 +24,21 @@ class Basket:
         if product_id not in self.basket:
             self.basket[product_id] = {'price': str(product.price), 'qty': qty}  # ключ поменять на строку
 
+        self.save()
+
+    def delete(self, product_id: str):
+        """
+        Delete product from session data
+        """
+
+        if product_id in self.basket:
+            del self.basket[product_id]
+            self.save()
+
+    def save(self):
+        """
+        Save session data after changing it
+        """
         self.session.modified = True
 
     def __iter__(self):
@@ -49,5 +64,4 @@ class Basket:
         return sum(item['qty'] for item in self.basket.values())
 
     def get_total_price(self):
-        print(self.basket.values())
         return sum(Decimal(item['total_price']) for item in self.basket.values())
