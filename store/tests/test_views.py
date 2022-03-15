@@ -1,7 +1,11 @@
+from importlib import import_module
+
 from django.contrib.auth.models import User
-from django.test import TestCase, RequestFactory
+from django.http import HttpRequest
+from django.test import TestCase
 from django.urls import reverse
 
+from django.conf import settings
 from store.models import Category, Product
 from store.views import product_all
 
@@ -12,7 +16,6 @@ class TestViewResponses(TestCase):
         User.objects.create(username='admin')
         Product.objects.create(category_id=1, name='django test', created_by_id=1,
                                slug='django-test', price='50.00', image='django')
-        self.factory = RequestFactory()
 
     def test_url_allowed_hosts(self):
         """
@@ -48,7 +51,9 @@ class TestViewResponses(TestCase):
         """
         Test homepage HTML
         """
-        request = self.factory.get('/')
+        request = HttpRequest()
+        engine = import_module(settings.SESSION_ENGINE)
+        request.session = engine.SessionStore()
         response = product_all(request)
         html = response.content.decode('utf8')
         self.assertIn('<title>BookStore</title>', html)
