@@ -29,12 +29,31 @@ def basket_add(request):
 
 def basket_delete(request):
     """
-    Delete product from session usig ajax
+    Delete product from session using ajax
     """
     basket = Basket(request)
     if request.POST.get('action') == 'post':
         product_id = request.POST.get('productid')
-        print('id', product_id)
         basket.delete(product_id=product_id)
-        response = JsonResponse({'Success': True})
+
+        basket_qty = basket.__len__()
+        basket_total = basket.get_total_price()
+        response = JsonResponse({'qty': basket_qty, 'subtotal': basket_total})
+        return response
+
+
+def basket_update(request):
+    """
+    Update quantity of product from session using ajax
+    """
+    basket = Basket(request)
+    if request.POST.get('action') == 'post':
+        product_id = request.POST.get('productid')
+        product_qty = int(request.POST.get('productqty'))
+        basket.update(product_id=product_id, qty=product_qty)
+
+        basket_qty = basket.__len__()
+        basket_total = basket.get_total_price()
+
+        response = JsonResponse({'qty': basket_qty, 'subtotal': basket_total})
         return response

@@ -31,10 +31,10 @@
                   <option selected>
                     {{item.qty}}
                   </option>
-                  <option value="">1</option>
-                  <option value="">2</option>
-                  <option value="">3</option>
-                  <option value="">4</option>
+                  <option value="1">1</option>
+                  <option value="2">2</option>
+                  <option value="3">3</option>
+                  <option value="4">4</option>
                 </select>
                 <button type="button" id="update-button" data-index="{{product.id}}"
                   class="btn btn-outline-secondary btn-sm update-button">
@@ -59,6 +59,7 @@
 </main>
 
 <script>
+    {# Delete product#}
     $(document).on('click', '.delete-button', function (e) {
         e.preventDefault();
         var prodid = $(this).data('index');
@@ -67,12 +68,34 @@
             url: '{% url 'basket:basket_delete' %}',
             data: {
                 productid: $(this).data('index'),
-                productqty: $('#select option:selected').text(),
                 csrfmiddlewaretoken: '{{csrf_token}}',
                 action: 'post'
             },
             success: function (json) {
                 $('.product-item[data-index=' + prodid + ']').remove();
+                document.getElementById('subtotal').innerHTML = json.subtotal;
+                document.getElementById('basket-qty').innerHTML = json.qty
+            },
+            error: function (xhr, errmsg, err){}
+        });
+    })
+
+    {# Update product#}
+    $(document).on('click', '.update-button', function (e) {
+        e.preventDefault();
+        var prodid = $(this).data('index');
+        $.ajax({
+            type: 'POST',
+            url: '{% url 'basket:basket_update' %}',
+            data: {
+                productid: $(this).data('index'),
+                productqty: $('#select' + prodid + ' option:selected').text(),
+                csrfmiddlewaretoken: '{{csrf_token}}',
+                action: 'post'
+            },
+            success: function (json) {
+                document.getElementById('basket-qty').innerHTML = json.qty
+                document.getElementById('subtotal').innerHTML = json.subtotal
             },
             error: function (xhr, errmsg, err){}
         });
