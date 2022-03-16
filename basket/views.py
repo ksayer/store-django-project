@@ -7,7 +7,7 @@ from .basket import Basket
 
 def basket_summary(request):
     # basket = Basket(request)
-    return render(request, 'store/basket/summary.html')
+    return render(request, 'basket/summary.html')
 
 
 def basket_add(request):
