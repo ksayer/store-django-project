@@ -72,7 +72,7 @@ class Basket:
         """
         return sum(item['qty'] for item in self.basket.values())
 
-    def get_total_price(self):
+    def get_total_price(self) -> int:
         """
         Calculate total price of all items in basket
         """

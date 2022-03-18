@@ -1,4 +1,4 @@
-from django.contrib.auth import login
+from django.contrib.auth import login, logout
 from django.contrib.sites.shortcuts import get_current_site
 from django.http import HttpResponse
 from django.shortcuts import render, redirect
@@ -7,7 +7,7 @@ from django.utils.encoding import force_bytes, force_text
 from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
 from django.contrib.auth.decorators import login_required
 
-from .forms import RegistrationForm
+from .forms import RegistrationForm, UserEditForm
 from .models import UserBase
 from .token import account_activation_token
 
@@ -17,6 +17,28 @@ def dashboard(request):
     return render(request, 'account/user/dashboard.html')
 
 
+@login_required
+def edit_details(request):
+    if request.method == 'POST':
+        user_form = UserEditForm(instance=request.user, data=request.POST)
+
+        if user_form.is_valid():
+            user_form.save()
+    else:
+        user_form = UserEditForm(instance=request.user)
+
+    return render(request, 'account/user/edit_details.html', context={'user_form': user_form})
+
+
+@login_required
+def delete_user(request):
+    user = UserBase.objects.get(user_name=request.user)
+    user.is_active = False
+    user.save()
+    logout(request)
+    return redirect('account:delete_confirmation')
+
+
 def account_register(request):
     if request.method == 'POST':
         register_form = RegistrationForm(request.POST)
@@ -24,7 +46,7 @@ def account_register(request):
             user = register_form.save(commit=False)
             # user.email = register_form.cleaned_data['email']
             user.set_password(register_form.cleaned_data['password'])
-            user.is_active = False
+            # user.is_active = False
             user.save()
             # Setup email
             current_site = get_current_site(request)
@@ -56,5 +78,3 @@ def account_activate(request, uidb64, token):
         return redirect('account:dashboard')
     else:
         return render(request, 'account/registration/activation_invalid.html')
-
-

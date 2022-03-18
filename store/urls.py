@@ -1,4 +1,5 @@
 from django.urls import path
+from django.views.generic import TemplateView
 
 from . import views
 
@@ -7,5 +8,6 @@ app_name = 'store'
 urlpatterns = [
     path('', views.product_all, name='product_all'),
     path('<slug:slug>', views.product_detail, name='product_detail'),
-    path('shop/<slug:category_slug>', views.category_list, name='category_list')
+    path('shop/<slug:category_slug>', views.category_list, name='category_list'),
+    path('payment/', TemplateView.as_view(template_name='store/payment.html'), name='payment')
 ]
