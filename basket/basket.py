@@ -1,5 +1,4 @@
 from decimal import Decimal
-
 from store.models import Product
 
 
@@ -49,6 +48,13 @@ class Basket:
         Save session data after changing it
         """
         self.session.modified = True
+
+    def clear(self):
+        """
+        Clear session data
+        """
+        del self.session['skey']
+        self.save()
 
     def __iter__(self):
         """

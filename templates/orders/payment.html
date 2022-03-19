@@ -1,4 +1,5 @@
 {% extends "store/base.html" %}
+{% load countries %}
 {% load static %}
 {% block title %}Payment{% endblock %}
 {% block content %}
@@ -11,62 +12,48 @@
           <div class="row">
             <div id="payment-form" class="col-12 col-lg-6 mx-auto">
               <h3 class="mb-3">Billing address</h3>
-              <!-- Error messages in this element -->
               <div id="card-errors" class="a" role="alert"></div>
-              <form method="post" action="/">
+              <form method="post" action="{% url "orders:order_placed" %}">
                   {% csrf_token %}
                 <div class="row g-3">
-                  <div class="col-sm-7">
+                  <div class="col-sm-12">
                     <label for="firstName" class="form-label">Customer Name</label>
-                    <input type="text" class="form-control" id="custName" placeholder="" required>
-                    <div class="invalid-feedback">
-                      Valid first name is required.
-                    </div>
+                    {{ form.name }}
                   </div>
                   <div class="col-12">
-                    <label for="email" class="form-label">Email <span class="text-muted">(Optional)</span></label>
-                    <input type="email" class="form-control" id="email" placeholder="you@example.com">
+                    <label  class="form-label">Phone <span class="text-muted">(Optional)</span></label>
+                    {{ form.phone }}
                     <div class="invalid-feedback">
                       Please enter a valid email address for shipping updates.
                     </div>
                   </div>
                   <div class="col-12">
                     <label for="address" class="form-label">Address</label>
-                    <input type="text" class="form-control" id="custAdd" placeholder="1234 Main St" required>
+                    {{ form.address1 }}
                     <div class="invalid-feedback">
                       Please enter your shipping address.
                     </div>
                   </div>
+
                   <div class="col-12">
                     <label for="address2" class="form-label">Address 2 <span
                         class="text-muted">(Optional)</span></label>
-                    <input type="text" class="form-control" id="custAdd2" placeholder="Apartment or suite">
+                    {{ form.address2 }}
                   </div>
                   <div class="col-md-5">
                     <label for="country" class="form-label">Country</label>
-                    <select class="form-select" id="country" required>
-                      <option value="">Choose...</option>
-                      <option>United States</option>
+                  {% get_countries as countries %}
+                    <select name="country" class="form-select" id="country" required>
+                    {% for country in countries %}
+                        <option value="{{ country.code }}" selected>{{ country.name }}</option>
+                    {% endfor %}
                     </select>
-                    <div class="invalid-feedback">
-                      Please select a valid country.
-                    </div>
                   </div>
-                  <div class="col-md-4">
-                    <label for="state" class="form-label">State</label>
-                    <select class="form-select" id="state" required>
-                      <option value="">Choose...</option>
-                      <option>California</option>
-                    </select>
+                <div class="col-md-4">
+                    <label for="state" class="form-label">City</label>
+                    {{ form.city }}
                     <div class="invalid-feedback">
                       Please provide a valid state.
-                    </div>
-                  </div>
-                  <div class="col-md-3">
-                    <label for="Postcode" class="form-label">Postcode</label>
-                    <input type="text" class="form-control" id="postCode" placeholder="" required>
-                    <div class="invalid-feedback">
-                      Zip code required.
                     </div>
                   </div>
                 </div>
