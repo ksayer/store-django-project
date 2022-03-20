@@ -1,11 +1,11 @@
 from importlib import import_module
-
-from django.contrib.auth.models import User
 from django.http import HttpRequest
 from django.test import TestCase
 from django.urls import reverse
 
 from django.conf import settings
+
+from account.models import UserBase
 from store.models import Category, Product
 from store.views import product_all
 
@@ -13,7 +13,7 @@ from store.views import product_all
 class TestViewResponses(TestCase):
     def setUp(self):
         Category.objects.create(name='django', slug='django')
-        User.objects.create(username='admin')
+        UserBase.objects.create(user_name='admin')
         Product.objects.create(category_id=1, name='django test', created_by_id=1,
                                slug='django-test', price='50.00', image='django')
 
