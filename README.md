@@ -1,8 +1,16 @@
 <h1 align="center">Django store project</h1>
 
-The project supports the main functionality, the presence of a showcase with a description of the product, a shopping cart.
+___Pet-project.___
 ___
-Installing
+___What have I done?___
+* Registration with email confirmation and token
+* Shopping cart on sessions
+* Orders
+* Changing shopping card with ajax
+* Tests
+
+___
+___Installing___
 
 ``pip install -r requirements.txt``
 
@@ -11,3 +19,7 @@ Installing
 ``python manage.py migrate``
 
 ``python manage.py runserver``
+___
+___Contacts___
+
+ksayer@yandex.ru

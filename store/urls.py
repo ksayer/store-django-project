@@ -1,13 +1,12 @@
 from django.urls import path
-from django.views.generic import TemplateView
 
 from . import views
 
 app_name = 'store'
 
 urlpatterns = [
-    path('', views.product_all, name='product_all'),
-    path('<slug:slug>', views.product_detail, name='product_detail'),
+    path('', views.ProductListView.as_view(), name='product_all'),
+    path('<slug:slug>', views.ProductDetail.as_view(), name='product_detail'),
     path('shop/<slug:category_slug>', views.category_list, name='category_list'),
 
 ]

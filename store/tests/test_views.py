@@ -7,7 +7,7 @@ from django.conf import settings
 
 from account.models import UserBase
 from store.models import Category, Product
-from store.views import product_all
+from store.views import ProductListView
 
 
 class TestViewResponses(TestCase):
@@ -51,10 +51,7 @@ class TestViewResponses(TestCase):
         """
         Test homepage HTML
         """
-        request = HttpRequest()
-        engine = import_module(settings.SESSION_ENGINE)
-        request.session = engine.SessionStore()
-        response = product_all(request)
+        response = self.client.get(reverse('store:product_all'))
         html = response.content.decode('utf8')
         self.assertIn('<title>BookStore</title>', html)
         self.assertEqual(response.status_code, 200)
